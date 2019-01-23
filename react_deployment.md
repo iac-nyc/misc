@@ -31,8 +31,8 @@ yarn add gh-pages
 +   "predeploy": "npm run build",
 +   "deploy": "gh-pages -d build",
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    ```
+    "build": "react-scripts build",    
+```
 ```
 "scripts": {
   "predeploy": "npm run build",
@@ -43,12 +43,13 @@ yarn add gh-pages
 ```
 "homepage": "http://myname.github.io/myapp"
 ```
- ```
+```
 "scripts": {
   "predeploy": "npm run build",
   "deploy": "gh-pages -d build",
   ...
-}```
+}
+```
 
 ```
 npm run deploy
