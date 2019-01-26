@@ -29,7 +29,8 @@
 6. git commit -m "initial commit"
 7. git remote add origin git @github.com:username/portfolio.git
 8. git push -u origin master
-9. git checkout -b gh-pages // to display on github
+9. git checkout -b gh-pages 
 10. git branch
 11. ls
 12. git push origin gh-pages
+13. git rebase master // bring gh-pages up to date with master
