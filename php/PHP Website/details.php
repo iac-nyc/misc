@@ -25,6 +25,15 @@ include("inc/header.php"); ?>
 
 <div class="section page">
     <div class="wrapper">
+        <div class="breadcrumbs">
+            <a href="catalog.php">Full Catalog</a>
+            &nbsp;&gt;            
+            <a href="catalog.php?cat=<?php echo strtolower($item["category"]); ?>">
+             <?php echo $item["category"]; ?>
+            </a>
+            &nbsp;&gt;           
+           <?php echo $item["title"]; ?>       
+        </div>
         <div class="media-picture">
         <span>   
             <img src="<?php echo $item["img"];?>" 
