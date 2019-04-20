@@ -3,7 +3,14 @@
     $email = $_POST["email"];
     $details = $_POST["details"];
 
-    echo "Name " . $name . "\n";
-    echo "Email " . $email . "\n";
-    echo "Details " . $details . "\n";
+    echo "<pre>";
+    $email_body = "";   
+
+    $email_body .= "Name " . $name . "\n";
+    $email_body .= "Email " . $email . "\n";
+    $email_body .= "Details " . $details . "\n";
+
+    echo $email_body;
+
+     echo "</pre>";
 ?>
