@@ -13,4 +13,7 @@
     echo $email_body;
 
      echo "</pre>";
-?>
+
+// To Do: Send email
+header("location:thanks.php");
+
