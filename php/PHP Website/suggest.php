@@ -1,8 +1,13 @@
 <?php 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST["name"];
-    $email = $_POST["email"];
-    $details = $_POST["details"];
+    $name = trim($_POST["name"]);
+    $email = trim($_POST["email"]);
+    $details = trim($_POST["details"]);
+    
+    if($name == "" || $email =="" || $details ==""){
+        echo "Please fill in the required fields: Name, Email and Details";
+        exit;
+    }
     
     echo "<pre>";
     $email_body = "";   
