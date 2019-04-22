@@ -19,11 +19,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         
     }
     
-    if($_POST["address"] != ""){
+    if(!isset($error_message) && $_POST["address"] != ""){
        $error_message = "Bad form input";
       
     }
-   if(!PHPMailer::validateAddress($email)){
+   if(!isset($error_message) && !PHPMailer::validateAddress($email)){
     $error_message = "Invalid Email Address";
       
    }
