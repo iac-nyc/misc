@@ -1,6 +1,10 @@
 <?php 
+//Import the PHPMailer class into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+require 'vendor/phpmailer/src/PHPMailer.php';
+require 'vendor/phpmailer/src/Exception.php';
+
 if($_SERVER["REQUEST_METHOD"] == "POST") {
-    
     $name = trim(filter_input(INPUT_POST,"name",FILTER_SANITIZE_STRING));
     $email = trim(filter_input(INPUT_POST,"email",FILTER_SANITIZE_EMAIL));
     $details = trim(filter_input(INPUT_POST,"details",FILTER_SANITIZE_SPECIAL_CHARS));
@@ -14,19 +18,31 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Bad form input";
         exit;
     }
+   if(!PHPMailer::validateAddress($email)){
+    echo "Invalid Email Address";
+       exit;
+   }
     
-    echo "<pre>";
-    $email_body = "";   
-    
+    $email_body = "";
     $email_body .= "Name " . $name . "\n";
     $email_body .= "Email " . $email . "\n";
-    $email_body .= "Details " . $details . "\n";
-    
-    echo $email_body;
-    
-    echo "</pre>";
-    
+    $email_body .= "Details " . $details . "\n";    
+
     // To Do: Send email
+    $mail = new PHPMailer;
+   
+    //It's important not to use the submitter's address as the from address as it's forgery,
+    //which will cause your messages to fail SPF checks.
+    //Use an address in your own domain as the from address, put the submitter's address in a reply-to
+    $mail->setFrom('iftekhar@ilovechittagong.com', $name);
+    $mail->addAddress('iftekhar@ilovechittagong.com', 'Iftekhar Chowdhury');
+    $mail->addReplyTo($email, $name);
+    $mail->Subject = 'Library Suggestion from ' . $name;
+    $mail->Body = $email_body;
+    if (!$mail->send()) {
+        echo "Mailer Error: " . $mail->ErrorInfo;
+        exit;
+    }
     header("location:suggest.php?status=thanks");
 }  
 
