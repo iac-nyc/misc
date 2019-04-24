@@ -22,3 +22,5 @@ try {
     echo "Bad Query";
     exit;
 }
+
+var_dump( $results->fetchAll() );
