@@ -12,3 +12,13 @@ try {
 }
 
 echo "Connected to the database";
+
+
+try {
+    $results =  $db->query("SELECT title, category FROM Media");  
+    echo "Retrieved Results";
+ 
+} catch (Exception $e) {
+    echo "Bad Query";
+    exit;
+}
