@@ -1,5 +1,19 @@
 <?php
 
+function full_catalog_array(){
+    
+    try {
+    $results =  $db->query("SELECT title, img, category FROM Media");  
+
+ 
+    } catch (Exception $e) {
+        echo "Bad Query";
+        exit;
+    }
+    $catalog = $results-> fetchAll();
+    
+}
+
 function get_item_html($id,$item) {
     $output = "<li><a href='details.php?id="
         . $id . "'><img src='" 

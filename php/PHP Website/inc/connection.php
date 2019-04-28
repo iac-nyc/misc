@@ -11,12 +11,4 @@ try {
     exit;
 }
 
-try {
-    $results =  $db->query("SELECT title, img, category FROM Media");  
-//    echo "Retrieved Results";
- 
-} catch (Exception $e) {
-    echo "Bad Query";
-    exit;
-}
-var_dump($results-> fetchAll(PDO::FETCH_ASSOC));
+
