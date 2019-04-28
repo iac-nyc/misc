@@ -11,16 +11,12 @@ try {
     exit;
 }
 
-echo "Connected to the database";
-
-
 try {
-    $results =  $db->query("SELECT title, category FROM Media");  
-    echo "Retrieved Results";
+    $results =  $db->query("SELECT title, img, category FROM Media");  
+//    echo "Retrieved Results";
  
 } catch (Exception $e) {
     echo "Bad Query";
     exit;
 }
-
-var_dump( $results->fetchAll() );
+var_dump($results-> fetchAll(PDO::FETCH_ASSOC));
