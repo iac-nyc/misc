@@ -5,14 +5,13 @@ $catalog = full_catalog_array();
 
 
 
-if(isset($_GET["id"])){
-    $id = $_GET["id"];
-    
-    if(isset($catalog[$id])){
+if (isset($_GET["id"])) {
+    $id = filter_input(INPUT_GET, "id",FILTER_SANITIZE_NUMBER_INT);
+      $item = single_item_array($id); 
+    if (isset($catalog[$id])) {
         $item = $catalog[$id];
     }
-    
- } 
+}
 if(!isset($item)){
     header("location:catalog.php");
     exit;
