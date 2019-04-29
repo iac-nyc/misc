@@ -1,6 +1,7 @@
 <?php
 
 function full_catalog_array(){
+    include("connection.php");
     
     try {
     $results =  $db->query("SELECT title, img, category FROM Media");  
