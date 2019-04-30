@@ -35,8 +35,24 @@ function single_item_array($id){
         echo "Bad Query";
         exit;
     }
-    $catalog = $results-> fetch();
-    var_dump(single_item_array(1));
+    $item = $results-> fetch();
+    if(empty($item)) return $item;
+       try {
+        $results =  $db->prepare(
+            "SELECT fullname, role 
+            FROM Media_People
+            JOIN People ON Media_People.people_id = People.people_id
+            WHERE Media_People.media_id = ?"
+        );  
+        $results->bindParam(1, $id,PDO::PARAM_INT);
+        $results->execute();
+    
+     
+    } catch (Exception $e) {
+        echo "Bad Query";
+        exit;
+    }
+    return $item;
 
 }
 
