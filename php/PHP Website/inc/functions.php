@@ -52,6 +52,10 @@ function single_item_array($id){
         echo "Bad Query";
         exit;
     }
+    
+    while($row = $results->fetch(PDO::FETCH_ASSOC)){
+        $item[$row["role"]][] = $row["fullname"];
+    }
     return $item;
 
 }
