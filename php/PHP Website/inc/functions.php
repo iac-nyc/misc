@@ -1,18 +1,18 @@
 <?php
-
 function full_catalog_array(){
     include("connection.php");
     
+    
     try {
-    $results =  $db->query("SELECT title, img, category FROM Media");  
-
- 
+        $results =  $db->query("SELECT title, img, category FROM Media");  
+    
+     
     } catch (Exception $e) {
         echo "Bad Query";
         exit;
     }
     $catalog = $results-> fetchAll();
-    
+
 }
 
 function single_item_array($id){
@@ -20,13 +20,15 @@ function single_item_array($id){
     
     
     try {
-        $results =  $db->query(
+        $results =  $db->prepare(
             "SELECT media_id, title, category,img, format, year, genre, publisher, isbn 
             FROM Media
             JOIN Genres ON Media.genre_id = Genres.genre_id
             LEFT OUTER JOIN Books ON Media.media_id = Books.Media_id
-            WHERE Media.media_id = $id"
+            WHERE Media.media_id = ?"
         );  
+        $results->bindParam(1, $id,PDO::PARAM_INT);
+        $results->execute();
     
      
     } catch (Exception $e) {
@@ -37,7 +39,6 @@ function single_item_array($id){
     var_dump(single_item_array(1));
 
 }
-
 
 function get_item_html($id,$item) {
     $output = "<li><a href='details.php?id="
@@ -50,13 +51,10 @@ function get_item_html($id,$item) {
 }
 
 function array_category($catalog,$category) {
-    
-     
     $output = array();
     
-     foreach ($catalog as $id => $item) {
-     
-        if ($category == null OR strtolower($category) == strtolower($item["category"])) {    
+    foreach ($catalog as $id => $item) {
+        if ($category == null OR strtolower($category) == strtolower($item["category"])) {
             $sort = $item["title"];
             $sort = ltrim($sort,"The ");
             $sort = ltrim($sort,"A ");
@@ -65,6 +63,6 @@ function array_category($catalog,$category) {
         }
     }
     
-    asort($output);    
+    asort($output);
     return array_keys($output);
 }
