@@ -15,6 +15,27 @@ function full_catalog_array(){
 
 }
 
+function random_catalog_array(){
+    include("connection.php");
+    
+    
+    try {
+        $results =  $db->query(
+            "SELECT title, img, category 
+            FROM Media
+            ORDER BY RANDOM()
+            LIMIT 4"
+        );  
+    
+     
+    } catch (Exception $e) {
+        echo "Bad Query";
+        exit;
+    }
+    $catalog = $results-> fetchAll();
+
+}
+
 function single_item_array($id){
     include("connection.php");
     
@@ -52,15 +73,11 @@ function single_item_array($id){
         echo "Bad Query";
         exit;
     }
-    
-    while($row = $results->fetch(PDO::FETCH_ASSOC)){
-        $item[$row["role"]][] = $row["fullname"];
-    }
     return $item;
 
 }
 
-function get_item_html($id,$item) {
+function get_item_html($item) {
     $output = "<li><a href='details.php?id="
         . $id . "'><img src='" 
         . $item["img"] . "' alt='" 
