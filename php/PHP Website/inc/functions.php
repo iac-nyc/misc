@@ -4,7 +4,50 @@ function full_catalog_array(){
     
     
     try {
-        $results =  $db->query("SELECT title, img, category FROM Media");  
+        $results =  $db->query(
+            "SELECT title, img, category 
+            FROM Media
+            ORDER BY 
+                REPLACE(
+                    REPLACE(
+                    REPLACE(title, 'The ',''),
+                    'An ',
+                    ''
+                    ),
+                    'A ',
+                    ''
+                    )"); 
+    
+     
+    } catch (Exception $e) {
+        echo "Bad Query";
+        exit;
+    }
+    $catalog = $results-> fetchAll();
+
+}
+function category_catalog_array($category){
+    include("connection.php");
+    $category = strtolower($category);
+    
+    try {
+        $results =  $db->prepare(
+            "SELECT title, img, category 
+            FROM Media
+            WHERE LOWER(category) = ?
+            ORDER BY 
+            REPLACE(
+                REPLACE(
+                REPLACE(title, 'The ',''),
+                'An ',
+                ''
+                ),
+                'A ',
+                ''
+                )"
+        );  
+        $results->bindParam(1,$category,PDO::PARAM_STR);
+        $results->execute();
     
      
     } catch (Exception $e) {

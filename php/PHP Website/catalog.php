@@ -1,7 +1,7 @@
 <?php 
 
 include("inc/functions.php");
-$catalog = full_catalog_array();
+
 
 $pageTitle = "Full Catalog";
 $section = null;
@@ -18,6 +18,11 @@ if (isset($_GET["cat"])) {
         $section = "music";
     }
 }
+if(empty($section)){
+    $catalog = full_catalog_array();
+}else {
+    $catalog = category_catalog_array($section);
+}
 
 include("inc/header.php"); ?>
 
@@ -33,9 +38,8 @@ include("inc/header.php"); ?>
         
         <ul class="items">
             <?php
-            $categories = array_category($catalog,$section);
-            foreach ($categories as $id) {
-                echo get_item_html($catalog[$id]);
+              foreach ($categories as $item) {
+                echo get_item_html($item);
             }
             ?>
         </ul>
