@@ -1,4 +1,28 @@
 <?php
+function get_catalog_count($category = null) {
+    $category = strtolower($category);
+    include("connection.php");
+
+    try {
+        $sql = "SELECT COUNT(media_id) FROM Media";
+        if (!empty($category)) {
+          $result = $db->prepare(
+            $sql
+            . " WHERE LOWER(category) = ?"
+          );
+          $result->bindParam(1,$category,PDO::PARAM_STR);
+        } else {
+          $result = $db->prepare($sql);
+        }
+        $result->execute();
+    } catch (Exception $e) {
+      echo "bad query";
+    }
+
+  $count = $result->fetchColumn(0);
+  return $count;
+}
+
 function full_catalog_array(){
     include("connection.php");
     
