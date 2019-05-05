@@ -23,12 +23,12 @@ function get_catalog_count($category = null) {
   return $count;
 }
 
-function full_catalog_array(){
+function full_catalog_array($limit = null, $offset = 0){
     include("connection.php");
     
     
     try {
-        $results =  $db->query(
+       $sql=
             "SELECT title, img, category 
             FROM Media
             ORDER BY 
@@ -40,37 +40,16 @@ function full_catalog_array(){
                     ),
                     'A ',
                     ''
-                    )"); 
-    
-     
-    } catch (Exception $e) {
-        echo "Bad Query";
-        exit;
-    }
-    $catalog = $results-> fetchAll();
-
-}
-function category_catalog_array($category){
-    include("connection.php");
-    $category = strtolower($category);
-    
-    try {
-        $results =  $db->prepare(
-            "SELECT title, img, category 
-            FROM Media
-            WHERE LOWER(category) = ?
-            ORDER BY 
-            REPLACE(
-                REPLACE(
-                REPLACE(title, 'The ',''),
-                'An ',
-                ''
-                ),
-                'A ',
-                ''
-                )"
-        );  
-        $results->bindParam(1,$category,PDO::PARAM_STR);
+                    )"; 
+  
+        if(is_integer($limit)){
+             $results = $db->prepare($sql."LIMIT ? OFFSET ?");
+            $results->bindParam(1,$limit,PDO::PARAM_INT);
+            $results->bindParam(2,$offset,PDO::PARAM_INT);
+        } else {
+             $results = $db->prepare($sql);
+        }
+             
         $results->execute();
     
      
@@ -80,6 +59,41 @@ function category_catalog_array($category){
     }
     $catalog = $results-> fetchAll();
 
+}
+function category_catalog_array($category, $limit = null, $offset = 0) {
+    include("connection.php");
+    $category = strtolower($category);
+    try {
+       $sql = "SELECT media_id, title, category,img 
+         FROM Media
+         WHERE LOWER(category) = ?
+         ORDER BY 
+         REPLACE(
+           REPLACE(
+              REPLACE(title,'The ',''),
+              'An ',
+              ''
+           ),
+           'A ',
+           ''
+         )";
+       if (is_integer($limit)) {
+          $results = $db->prepare($sql . " LIMIT ? OFFSET ?");
+         $results->bindParam(1,$category,PDO::PARAM_STR);
+          $results->bindParam(2,$limit,PDO::PARAM_INT);
+          $results->bindParam(3,$offset,PDO::PARAM_INT);
+       } else {
+         $results = $db->prepare($sql);
+         $results->bindParam(1,$category,PDO::PARAM_STR);
+       }
+       $results->execute();
+    } catch (Exception $e) {
+       echo "Unable to retrieved results";
+       exit;
+    }
+
+    $catalog = $results->fetchAll();
+    return $catalog;
 }
 
 function random_catalog_array(){
