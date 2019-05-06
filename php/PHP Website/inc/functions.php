@@ -79,7 +79,7 @@ function category_catalog_array($category, $limit = null, $offset = 0) {
          )";
        if (is_integer($limit)) {
           $results = $db->prepare($sql . " LIMIT ? OFFSET ?");
-         $results->bindParam(1,$category,PDO::PARAM_STR);
+          $results->bindParam(1,$category,PDO::PARAM_STR);
           $results->bindParam(2,$limit,PDO::PARAM_INT);
           $results->bindParam(3,$offset,PDO::PARAM_INT);
        } else {
@@ -157,6 +157,35 @@ function single_item_array($id){
     return $item;
 
 }
+
+function genre_array($category = null) {
+  $category = strtolower($category);
+  include("connection.php");
+
+  try {
+    $sql = "SELECT genre, category"
+      . " FROM Genres "
+      . " JOIN Genre_Categories "
+      . " ON Genres.genre_id = Genre_Categories.genre_id ";
+    if (!empty($category)) {
+      $results = $db->prepare($sql 
+          . " WHERE LOWER(category) = ?"
+          . " ORDER BY genre");
+      $results->bindParam(1,$category,PDO::PARAM_STR);
+    } else {
+      $results = $db->prepare($sql . " ORDER BY genre");
+    }
+    $results->execute();
+  } catch (Exception $e) {
+    echo "bad query";
+  }
+  $genres = array();
+  while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
+      $genres[$row["category"]][] = $row["genre"];
+  }
+  return $genres;
+}
+
 
 function get_item_html($item) {
     $output = "<li><a href='details.php?id="
