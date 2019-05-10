@@ -1,10 +1,17 @@
 <?php
+session_start();
 $total = 5;
 $page = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_NUMBER_INT);
 if(empty($page)){
+   // $_SESSION['word'][1]='';
+   // unset($_SESSION['word'][2]);
+    session_destroy();
     $page = 1;
 }
-
+if(isset($_POST['word'])){
+    $_SESSION['word'][$page-1] = filter_input(INPUT_POST,'word',FILTER_SANITIZE_STRING);
+   // var_dump($_SESSION);
+}
 if ($page > $total) {
     header('location: story.php');
     exit;

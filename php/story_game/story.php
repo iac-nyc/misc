@@ -1,13 +1,14 @@
 <?php
-$word1 = '__';
-$word2 = '__';
-$word3 = '__';
-$word4 = '__';
-$word5 = '__';
+session_start();
+$word1 = htmlspecialchars($_SESSION['word'][1]);
+$word2 = htmlspecialchars($_SESSION['word'][2]);
+$word3 = htmlspecialchars($_SESSION['word'][3]);
+$word4 = htmlspecialchars($_SESSION['word'][4]);
+$word5 = htmlspecialchars($_SESSION['word'][5]);
 
 include 'inc/header.php';
 
-echo '<h1>My Story Game</h1>';
+echo '<h1>My Treehouse Story</h1>';
 
 echo '<p>There once was a(n) ' . $word1;
 echo ' programmer named ' . $word2; 
