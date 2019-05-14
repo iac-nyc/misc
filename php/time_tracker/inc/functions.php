@@ -12,16 +12,24 @@ function get_project_list(){
     }
 }
 
-function get_task_list(){
+function get_task_list($filter = null){
     include 'connection.php';
     $sql = 'SELECT tasks.*, projects.title as project FROM tasks JOIN projects ON tasks.project_id = projects.project_id';
     
+    $orderBy = ' ORDER BY date DESC';
+    
+    if($filter) {
+        $orderBy = ' ORDER BY projects.title ASC, date DESC';
+    }
+    
     try{
-    return $db->query($sql);
+     $results =  $db->prepare($sql . $orderBy);
+     $results->execute();   
     } catch (Exception $e){
         echo "Error! : ". $e->getMessage(). "</br>";
         return array();
     }
+    return $results->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function add_project($title, $category){
@@ -33,6 +41,25 @@ function add_project($title, $category){
         $results = $db->prepare($sql);
         $results->bindValue(1, $title, PDO::PARAM_STR);
         $results->bindValue(2, $category, PDO::PARAM_STR);
+        $results->execute();
+    } catch (Exception $e){
+        echo "Error!: " . $e->getMessage(). "<br />";
+        return false;
+    }
+    return true;
+}
+
+function add_task($project_id, $title, $date, $time){
+    include 'connection.php';
+    
+    $sql = 'INSERT INTO tasks(project_id, title, date, time) VALUES(?, ?, ?, ?)';
+    
+    try{
+        $results = $db->prepare($sql);
+        $results->bindValue(1, $project_id, PDO::PARAM_INT);
+        $results->bindValue(2, $title, PDO::PARAM_STR);
+        $results->bindValue(3, $date, PDO::PARAM_STR);
+        $results->bindValue(4, $time, PDO::PARAM_INT);
         $results->execute();
     } catch (Exception $e){
         echo "Error!: " . $e->getMessage(). "<br />";
