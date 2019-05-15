@@ -16,6 +16,13 @@ function get_task_list($filter = null){
     include 'connection.php';
     $sql = 'SELECT tasks.*, projects.title as project FROM tasks JOIN projects ON tasks.project_id = projects.project_id';
     
+    $where='';
+    if(is_array($filter)){
+        if($filter[0] == 'project'){
+            $where = ' WHERE projects.project_id = ?';
+        }
+    }
+    
     $orderBy = ' ORDER BY date DESC';
     
     if($filter) {
@@ -23,7 +30,10 @@ function get_task_list($filter = null){
     }
     
     try{
-     $results =  $db->prepare($sql . $orderBy);
+     $results =  $db->prepare($sql . $where . $orderBy);
+        if(is_array($filter)) {
+            $results->bindValue(1,$filter[1], PDO::PARAM_INT);
+        }
      $results->execute();   
     } catch (Exception $e){
         echo "Error! : ". $e->getMessage(). "</br>";
