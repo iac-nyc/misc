@@ -93,6 +93,28 @@ function get_project($project_id){
     return $results->fetch();
 }
 
+function delete_project($project_id){
+    include 'connection.php';
+    
+    $sql = 'DELETE FROM projects WHERE project_id = ?'
+        . ' AND project_id NOT IN (SELECT project_id FROM tasks)';
+    
+    try{
+        $results = $db->prepare($sql);
+        $results->bindValue(1, $project_id, PDO::PARAM_INT);
+        $results->execute();
+    } catch (Exception $e){
+        echo "Error!: " . $e->getMessage(). "<br />";
+        return false;
+    }
+    if ($results->rowCount() > 0 ){
+        return true;
+    } else {
+        return false;
+    }
+    
+}
+
 function add_task($project_id, $title, $date, $time, $task_id = null){
     include 'connection.php';
     
